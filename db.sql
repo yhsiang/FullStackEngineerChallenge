@@ -1,0 +1,3 @@
+CREATE DATABASE IF NOT EXISTS `review360`;
+
+USE `review360`;

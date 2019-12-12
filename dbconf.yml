@@ -1,0 +1,5 @@
+driver: mysql
+migrationsDir: migrations
+
+# load dsn from the environment variable
+dsn: $MYSQL_URL
