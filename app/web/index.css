@@ -1,0 +1,13 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+  overflow: hidden;
+}
+
+#app-root {
+  display: flex;
+  height: 100%;
+}
