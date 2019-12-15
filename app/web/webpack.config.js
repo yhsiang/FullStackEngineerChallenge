@@ -4,8 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rootDir = path.join(__dirname, '..');
 const webpackEnv = process.env.NODE_ENV || 'development';
 
-console.log(path.resolve('src'));
-
 module.exports = {
   mode: webpackEnv,
   entry: {
@@ -32,6 +30,7 @@ module.exports = {
           path.resolve('node_modules/react-native-web'),
           path.resolve('node_modules/react-native-tab-view'),
           path.resolve('node_modules/static-container'),
+          path.resolve('node_modules/react-router-native'),
         ],
         loader: 'babel-loader',
       },

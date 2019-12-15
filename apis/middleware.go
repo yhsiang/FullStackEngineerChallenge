@@ -23,17 +23,6 @@ func Database() gin.HandlerFunc {
 	}
 }
 
-// func Authenticate() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		user := c.PostForm("user")
-// 		pass := c.PostForm("pass")
-// 		if user == "admin" && pass == "admin" {
-// 			session.Set("user", user)
-// 			session.Save()
-// 		}
-// 		c.Next()
-// 	}
-// }
 func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)

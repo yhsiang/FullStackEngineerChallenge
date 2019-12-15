@@ -32,18 +32,21 @@ func main() {
 		basicAuth := api.Group("/")
 		basicAuth.Use(apis.AuthenticationRequired())
 		{
-			api.POST("/signOut", apis.SignOut)
+			basicAuth.GET("/employees/:id", apis.QueryEmployee)
+			basicAuth.POST("/signOut", apis.SignOut)
+			basicAuth.POST("/reviews", apis.CreateReview)
+			basicAuth.GET("/reviews/:review_id", apis.QueryReview)
 		}
 	}
 	adminAuth := api.Group("/admin")
 	adminAuth.Use(apis.AuthenticationRequired("admin"))
 	{
 		adminAuth.GET("/employees", apis.QueryEmployees)
-		adminAuth.GET("/employees/:id", apis.QueryEmployee)
 		adminAuth.POST("/employees", apis.CreateEmployee)
 		adminAuth.PUT("/employees/:id", apis.UpdateEmployee)
 		adminAuth.DELETE("/employees/:id", apis.RemoveEmployee)
-		adminAuth.GET("/reviews/:assign_id", apis.QueryReview)
+		adminAuth.POST("/reviewers/add", apis.AddReviewer)
+		adminAuth.POST("/reviewers/remove", apis.RemoveReviewer)
 	}
 
 	if err := router.Run(); err != nil {

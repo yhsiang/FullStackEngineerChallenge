@@ -8,10 +8,14 @@ import (
 
 type Review struct {
 	ID        int64     `db:"id"`
-	Content   string    `db:"content"`
-	AssignID  int64     `db:"assign_id"`
+	Content   string    `db:"content" json:"content"`
+	AssignID  int64     `db:"assign_id" json:"assign_id"`
 	UpdatedAt time.Time `db:"updated_at"`
 	CreatedAt time.Time `db:"created_at"`
+}
+
+func (r Review) Type() ResponseType {
+	return ReviewType
 }
 
 func (r Review) FindAll(db database.DB, em Employee) (reviews []Review, err error) {
@@ -33,8 +37,8 @@ func (r Review) FindAll(db database.DB, em Employee) (reviews []Review, err erro
 }
 
 func (r Review) Find(db database.DB) (Review, error) {
-	sqlStatement := `select * from performance_reviews WHERE id = ?`
-	err := db.QueryRow(sqlStatement, r.ID).Scan(&r)
+	sqlStatement := `select assign_id, content from performance_reviews WHERE id = ?`
+	err := db.QueryRow(sqlStatement, r.ID).Scan(&r.AssignID, &r.Content)
 	if err != nil {
 		return r, err
 	}
