@@ -1,9 +1,14 @@
 import React from 'react';
+import api from '../apis/api';
 
 export const auth = {
   isAuthenticated: false,
-  authenticate(cb) {
+  token: null,
+  authenticate(token, cb) {
     this.isAuthenticated = true;
+    this.token = token;
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+
     if (cb) {
       setTimeout(cb, 100);
     }

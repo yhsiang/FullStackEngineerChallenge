@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {useHistory} from 'react-router-native';
 import {
@@ -14,8 +14,19 @@ import {
   Title,
   H1,
 } from 'native-base';
+import {Base64} from 'js-base64';
+
 import AuthContext from '../contexts/AuthContext';
 import {signIn} from '../apis';
+import storage from '../storage';
+
+const decode = token => {
+  const [, payload] = token.split('.');
+  const str = Base64.decode(payload);
+  const data = JSON.parse(str);
+
+  return data.id;
+};
 
 const styles = StyleSheet.create({
   h1: {margin: 15},
@@ -28,14 +39,39 @@ const SignInScreen = () => {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
 
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      storage
+        .load({key: 'token'})
+        .then(token => {
+          const userId = decode(token);
+          auth.authenticate(token, () => {
+            if (userId === 'admin') {
+              history.push('/admin');
+            } else if (userId.match(/user(\d+)/)) {
+              const id = userId.match(/user(\d+)/)[1];
+              history.push(`/user/${id}`);
+            }
+          });
+        })
+        .catch(() => {});
+    }
+  }, [auth, history]);
+
   const handleSubmit = () => {
     signIn(user, pass).then(data => {
       if (data) {
-        auth.authenticate(() => {
-          if (data.role === 'user') {
-            history.push(`/${data.role}/${data.id}`);
-          } else {
-            history.push(`/${data.role}`);
+        storage.save({
+          key: 'token',
+          data: data.token,
+        });
+        const userId = decode(data.token);
+        auth.authenticate(data.token, () => {
+          if (userId === 'admin') {
+            history.push('/admin');
+          } else if (userId.match(/user(\d+)/)) {
+            const id = userId.match(/user(\d+)/)[1];
+            history.push(`/user/${id}`);
           }
         });
       } else {
@@ -69,11 +105,7 @@ const SignInScreen = () => {
             />
           </Item>
         </Form>
-        <Button
-          block
-          style={styles.button}
-          onPress={handleSubmit}
-          onClick={handleSubmit}>
+        <Button block style={styles.button} onPress={handleSubmit}>
           <Text>Sign In</Text>
         </Button>
       </Content>

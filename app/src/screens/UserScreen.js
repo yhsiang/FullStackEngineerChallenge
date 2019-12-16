@@ -1,5 +1,4 @@
 import React, {useContext, useState, useEffect} from 'react';
-// import {StyleSheet} from 'react-native';
 import {useHistory} from 'react-router-native';
 import {
   Container,
@@ -12,38 +11,29 @@ import {
   Body,
   Right,
   Icon,
-  // Form,
-  // Textarea,
 } from 'native-base';
 
-import {signOut, getEmployee} from '../apis';
+import {getEmployee} from '../apis';
 import {AuthContext} from '../contexts';
 import EmployeeList from '../components/EmployeeList';
-
-// const styles = StyleSheet.create({
-//   list: {margin: 15},
-//   button: {margin: 15, marginBottom: 50},
-// });
+import storage from '../storage';
 
 const UserScreen = ({match}) => {
   const auth = useContext(AuthContext);
   const history = useHistory();
-  // const {state, dispatch} = useContext(SharedDataContext);
   const id = match.params.id;
   const [reviewees, setReviewees] = useState([]);
-
-  // const [name, setName] = useState('');
-  // const {state, dispatch} = useContext(SharedDataContext);
 
   useEffect(() => {
     getEmployee(id).then(data => setReviewees(data.reviewees));
   }, [id]);
 
   const handleSignOut = () => {
-    signOut().then(() => {
-      auth.signout(() => {
-        history.push('/');
-      });
+    storage.remove({
+      key: 'token',
+    });
+    auth.signout(() => {
+      history.push('/');
     });
   };
   return (

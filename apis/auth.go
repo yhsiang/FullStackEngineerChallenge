@@ -1,88 +1,92 @@
 package apis
 
 import (
-	"net/http"
+	"regexp"
+	"strconv"
 
-	"github.com/gin-contrib/sessions"
+	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/yhsiang/review360/database"
 	"github.com/yhsiang/review360/models"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SignIn(c *gin.Context) {
-	session := sessions.Default(c)
-	user := c.PostForm("user")
-	pass := c.PostForm("pass")
-	if user == "admin" && pass == "admin" {
-		session.Set("user", user)
-		session.Set("authType", "admin")
-		err := session.Save()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, ErrorResponse{
-				Status:  false,
-				Message: err.Error(),
-			})
-		}
-		c.JSON(http.StatusOK, StatusResponse{Status: true})
-		return
-	}
-
-	if user == "user1" && pass == "user1" {
-		var em = models.Employee{
-			ID: 1,
-		}
-		db := c.MustGet("DB").(database.DB)
-		employee, err := em.Find(db)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, ErrorResponse{
-				Status:  false,
-				Message: err.Error(),
-			})
-			c.Abort()
-			return
-		}
-		session.Set("user", employee.ID)
-		session.Set("authType", "employee")
-		err = session.Save()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, ErrorResponse{
-				Status:  false,
-				Message: err.Error(),
-			})
-			c.Abort()
-			return
-		}
-		c.JSON(http.StatusOK, DataResponse{Status: true, Data: employee})
-		return
-	}
-
-	c.JSON(http.StatusUnauthorized, ErrorResponse{
-		Status:  false,
-		Message: `invalid user and password`,
-	})
+type login struct {
+	Username string `form:"user" binding:"required"`
+	Password string `form:"pass" binding:"required"`
 }
 
-func SignOut(c *gin.Context) {
-	session := sessions.Default(c)
-	user := session.Get("user")
-	if user == nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Status:  false,
-			Message: "please login first",
-		})
-		return
+type User struct {
+	Username string
+}
+
+const IdentityKey = "id"
+
+func PlayloadHandler(data interface{}) jwt.MapClaims {
+	if v, ok := data.(*User); ok {
+		return jwt.MapClaims{
+			IdentityKey: v.Username,
+		}
+	}
+	return jwt.MapClaims{}
+}
+
+func IdentityHandler(c *gin.Context) interface{} {
+	claims := jwt.ExtractClaims(c)
+	return &User{
+		Username: claims[IdentityKey].(string),
+	}
+}
+
+func Authenticator(c *gin.Context) (interface{}, error) {
+	var loginVals login
+	if err := c.ShouldBind(&loginVals); err != nil {
+		return "", jwt.ErrMissingLoginValues
+	}
+	userID := loginVals.Username
+	password := loginVals.Password
+
+	if userID == "admin" && password == "admin" {
+		return &User{
+			Username: userID,
+		}, nil
 	}
 
-	session.Clear()
-	err := session.Save()
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, ErrorResponse{
-			Status:  false,
-			Message: err.Error(),
-		})
+	re := regexp.MustCompile(`^user(\d+)`)
+	if re.Match([]byte(userID)) && userID == password {
+		matchID := re.FindSubmatch([]byte(userID))
+		employeeID, err := strconv.ParseInt(string(matchID[1]), 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		em := models.Employee{
+			ID: employeeID,
+		}
+		db := c.MustGet("DB").(database.DB)
+		_, err = em.Find(db)
+		if err != nil {
+			return nil, err
+		}
+		return &User{
+			Username: userID,
+		}, nil
 	}
 
-	c.JSON(http.StatusOK, StatusResponse{Status: true})
+	return nil, jwt.ErrFailedAuthentication
+}
+
+func Authorizator(data interface{}, c *gin.Context) bool {
+	re := regexp.MustCompile(`^user(\d+)`)
+	if v, ok := data.(*User); ok && (v.Username == "admin" || re.Match([]byte(v.Username))) {
+		return true
+	}
+
+	return false
+}
+
+func Unauthorized(c *gin.Context, code int, message string) {
+	c.JSON(code, gin.H{
+		"code":    code,
+		"message": message,
+	})
 }

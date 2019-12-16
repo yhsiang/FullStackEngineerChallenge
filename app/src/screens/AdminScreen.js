@@ -24,8 +24,9 @@ import {
   addData,
   fetchInitial,
 } from '../contexts';
-import {getEmployees, createEmployee, signOut} from '../apis';
+import {getEmployees, createEmployee} from '../apis';
 import {EmployeeList} from '../components';
+import storage from '../storage';
 
 const styles = StyleSheet.create({
   list: {margin: 15},
@@ -50,10 +51,11 @@ const AdminScreen = () => {
   };
 
   const handleSignOut = () => {
-    signOut().then(() => {
-      auth.signout(() => {
-        history.push('/');
-      });
+    storage.remove({
+      key: 'token',
+    });
+    auth.signout(() => {
+      history.push('/');
     });
   };
   return (
