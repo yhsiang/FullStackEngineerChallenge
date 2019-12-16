@@ -66,7 +66,7 @@ const AdminScreen = () => {
           <Title>Employees</Title>
         </Body>
         <Right>
-          <Button transparent onPress={handleSignOut} onClick={handleSignOut}>
+          <Button transparent onPress={handleSignOut}>
             <Icon name="log-out" />
           </Button>
         </Right>
@@ -82,11 +82,7 @@ const AdminScreen = () => {
             />
           </Item>
         </Form>
-        <Button
-          block
-          style={styles.button}
-          onPress={addEmployee}
-          onClick={addEmployee}>
+        <Button block style={styles.button} onPress={addEmployee}>
           <Text>Add</Text>
         </Button>
         <EmployeeList data={state} />

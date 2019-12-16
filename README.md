@@ -1,13 +1,77 @@
 # Review 360
 
 # Requirement
+  - dotenv
+  - golang
+  - mysql
+  - goose (migration tools)
+  - npm
+  - yarn
+  - react-native-cli
 
-- golang
-- mysql
-- goose (migration tools)
-- npm
-- yarn
-- react-native-cli
+# Development
+
+we suggest using dotenv for environment variables management.
+you can choose `dotenv` or `godotenv`, then create .env.local first.
+
+`.env.local` recommended content is below.
+```
+MYSQL_HOST=127.0.0.1
+MYSQL_PASSWORD=
+MYSQL_URL=root:$MYSQL_PASSWORD@tcp($MYSQL_HOST:3306)/review360
+SECRET=
+PORT=8080
+```
+
+## Backend Setup
+
+Use golang as the backend language. so you will need to install golang in your environment. use go module for dependencies and setup mysql first.
+Please create an account and database, `db.sql` will be helpful. and update your `.env.local` by those values.
+
+making test first!
+`$ dotenv -f .env.local -- make test`
+
+if anything goes well, you can try the command below, it will start a api server on 8080.
+`$ dotenv -f .env.local -- go run main.go`
+
+## Frontend Setup
+
+Use react as the frontend framework, we could develop three platform at the same time by react native and react native web. But android is lack of testing. so the first recommendation is trying ios or web.
+
+install npm packages
+`$ yarn`
+
+build ios environment, start simulator, and run metro bundler.
+`$ yarn ios`
+
+build web by webpack
+`$ yarn web`
+
+## Docker environment
+
+if you don't have golang and nodejs environment, you can simply build a runnable service by docker.
+
+build service, init container, and setup database at the same time.
+`$ make docker`
+
+only build service, it will use multi-stage for building backend and frontend.
+`$ make docker-review360`
+
+build init container, it will build a image for database migrations at the first.
+`$ make docker-init`
+
+build database
+`$ make docker-mysql`
+
+Run services by `docker-compose`
+`$ make run`
+
+Shutdown all services
+`$ make down`
+
+Build frontend code by local yarn. static files is served at `build` directory, and then you can test frontend production app in the local.
+`$ make build-app`
+
 
 # Full Stack Developer Challenge
 This is an interview challengs. Please feel free to fork. Pull Requests will be ignored.

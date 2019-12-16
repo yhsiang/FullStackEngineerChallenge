@@ -1,0 +1,11 @@
+FROM golang:1.13-alpine3.10
+RUN apk add --no-cache git ca-certificates gcc libc-dev pkgconfig mysql-client
+
+WORKDIR /app
+RUN go get github.com/steinbacher/goose/cmd/goose
+
+COPY dbconf.yml .
+COPY migrations migrations
+COPY wait-for-it.sh .
+# CMD ["/go/bin/goose", "status", ";"]
+CMD /go/bin/goose status ; /go/bin/goose up

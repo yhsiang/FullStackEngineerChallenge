@@ -1,0 +1,5 @@
+app/node_modules
+# only build web for small size build context for docker
+app/ios
+app/android
+.vscode/

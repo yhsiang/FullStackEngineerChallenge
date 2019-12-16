@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Ionicons";
-  src: url("/node_modules/react-native-vector-icons/Fonts/Ionicons.ttf") format("truetype");
+  src: url("../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf") format("truetype");
 }
 
 html, body {

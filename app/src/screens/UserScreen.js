@@ -44,7 +44,7 @@ const UserScreen = ({match}) => {
           <Title>Reviewee</Title>
         </Body>
         <Right>
-          <Button transparent onPress={handleSignOut} onClick={handleSignOut}>
+          <Button transparent onPress={handleSignOut}>
             <Icon name="log-out" />
           </Button>
         </Right>

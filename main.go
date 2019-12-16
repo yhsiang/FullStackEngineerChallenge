@@ -7,6 +7,7 @@ import (
 
 	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -17,9 +18,9 @@ import (
 func main() {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:8081", "http://localhost:8082"},
+		AllowOrigins:     []string{"http://localhost:8080", "http://localhost:8081", "http://localhost:8082"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
@@ -46,6 +47,7 @@ func main() {
 	}
 
 	router.Use(apis.Database())
+	router.Use(static.Serve("/", static.LocalFile("./build", false)))
 	api := router.Group("/api/v1")
 	{
 		api.POST("/signIn", authMiddleware.LoginHandler)

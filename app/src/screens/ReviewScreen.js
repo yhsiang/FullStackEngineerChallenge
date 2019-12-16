@@ -76,11 +76,7 @@ const ReviewScreen = ({match: {path, params}}) => {
             {content}
           </Textarea>
         </Form>
-        <Button
-          block
-          style={styles.field}
-          onPress={handleSubmit}
-          onClick={handleSubmit}>
+        <Button block style={styles.field} onPress={handleSubmit}>
           <Text>Submit Feedback</Text>
         </Button>
       </Content>
