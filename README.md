@@ -29,9 +29,11 @@ Use golang as the backend language. so you will need to install golang in your e
 Please create an account and database, `db.sql` will be helpful. and update your `.env.local` by those values.
 
 making test first!
+
 `$ dotenv -f .env.local -- make test`
 
 if anything goes well, you can try the command below, it will start a api server on 8080.
+
 `$ dotenv -f .env.local -- go run main.go`
 
 ## Frontend Setup
@@ -39,12 +41,15 @@ if anything goes well, you can try the command below, it will start a api server
 Use react as the frontend framework, we could develop three platform at the same time by react native and react native web. But android is lack of testing. so the first recommendation is trying ios or web.
 
 install npm packages
+
 `$ yarn`
 
 build ios environment, start simulator, and run metro bundler.
+
 `$ yarn ios`
 
 build web by webpack
+
 `$ yarn web`
 
 ## Docker environment
@@ -52,26 +57,42 @@ build web by webpack
 if you don't have golang and nodejs environment, you can simply build a runnable service by docker.
 
 build service, init container, and setup database at the same time.
+
 `$ make docker`
 
 only build service, it will use multi-stage for building backend and frontend.
+
 `$ make docker-review360`
 
 build init container, it will build a image for database migrations at the first.
+
 `$ make docker-init`
 
 build database
+
 `$ make docker-mysql`
 
 Run services by `docker-compose`
+
 `$ make run`
 
 Shutdown all services
+
 `$ make down`
 
 Build frontend code by local yarn. static files is served at `build` directory, and then you can test frontend production app in the local.
+
 `$ make build-app`
 
+## Testing
+
+Server side use simply go test, but frontend is more complicated. we separate test files to native and web for different environment testing.
+
+Web platform is using js-dom, and native part is using node.
+Ideally, we could hold one test file for both environment, but actually
+we will encounter many problems from testing lib, test runner, 3rd lib and our own code. so just separating them at the beginning will save lots of time.
+
+more details can see `app/config`
 
 # Full Stack Developer Challenge
 This is an interview challengs. Please feel free to fork. Pull Requests will be ignored.

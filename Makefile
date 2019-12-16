@@ -2,7 +2,12 @@
 
 all: test docker
 
-test:
+test: backend-test app-test
+
+app-test:
+	cd app && yarn test
+
+backend-test:
 	go test ./...
 
 run:
