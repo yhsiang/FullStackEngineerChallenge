@@ -11,6 +11,10 @@ type DB struct {
 	*sql.DB
 }
 
+func NewWithDB(db *sql.DB) DB {
+	return DB{db}
+}
+
 func New() (DB, error) {
 	// TODO: add os.LookupEnv here
 	db, err := sql.Open("mysql", os.Getenv("MYSQL_URL"))

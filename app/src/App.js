@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {NativeRouter, Route, Redirect} from 'react-router-native';
+import RouterPackage, {Router} from './Routing';
 
 import {
   SignInScreen,
@@ -10,9 +10,10 @@ import {
 } from './screens';
 import {AuthContext, auth, DataProvider} from './contexts';
 
+const {Route, Redirect} = RouterPackage;
 const App = () => {
   return (
-    <NativeRouter>
+    <Router>
       <AuthContext.Provider value={auth}>
         <DataProvider>
           <Route exact path="/" component={SignInScreen} />
@@ -26,7 +27,7 @@ const App = () => {
           <PrivateRoute path="/assign/:employee_id" component={AssignScreen} />
         </DataProvider>
       </AuthContext.Provider>
-    </NativeRouter>
+    </Router>
   );
 };
 

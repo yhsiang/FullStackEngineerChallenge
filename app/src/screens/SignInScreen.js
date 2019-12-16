@@ -1,6 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {useHistory} from 'react-router-native';
 import {
   Container,
   Header,
@@ -19,7 +18,9 @@ import {Base64} from 'js-base64';
 import AuthContext from '../contexts/AuthContext';
 import {signIn} from '../apis';
 import storage from '../storage';
+import RouterPackage from '../Routing';
 
+const {useHistory} = RouterPackage;
 const decode = token => {
   const [, payload] = token.split('.');
   const str = Base64.decode(payload);

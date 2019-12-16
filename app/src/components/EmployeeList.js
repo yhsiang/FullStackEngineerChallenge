@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory} from 'react-router-native';
+import RouterPackage from '../Routing';
 import {
   Text,
   List,
@@ -10,6 +10,8 @@ import {
   CheckBox,
   Body,
 } from 'native-base';
+
+const {useHistory} = RouterPackage;
 
 const EmployeeList = ({
   data,

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {useHistory} from 'react-router-native';
+import RouterPackage from '../Routing';
 import {
   Container,
   Header,
@@ -18,7 +18,7 @@ import {
 } from 'native-base';
 
 import {getEmployee, createReview, getReview} from '../apis';
-
+const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
   field: {marginTop: 30},
   textArea: {padding: 10},

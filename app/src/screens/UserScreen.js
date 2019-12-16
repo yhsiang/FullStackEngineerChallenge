@@ -1,5 +1,4 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {useHistory} from 'react-router-native';
 import {
   Container,
   Header,
@@ -17,6 +16,9 @@ import {getEmployee} from '../apis';
 import {AuthContext} from '../contexts';
 import EmployeeList from '../components/EmployeeList';
 import storage from '../storage';
+import RouterPackage from '../Routing';
+
+const {useHistory} = RouterPackage;
 
 const UserScreen = ({match}) => {
   const auth = useContext(AuthContext);

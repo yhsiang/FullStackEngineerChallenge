@@ -12,8 +12,8 @@ import {
   Title,
   Right,
 } from 'native-base';
-import {useHistory} from 'react-router-native';
 
+import RouterPackage from '../Routing';
 import {EmployeeList} from '../components';
 import {
   SharedDataContext,
@@ -23,6 +23,7 @@ import {
 } from '../contexts';
 import {addReviewer, removeReviewer} from '../apis';
 
+const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
   header: {margin: 15},
 });

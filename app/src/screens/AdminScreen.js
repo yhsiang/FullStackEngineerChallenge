@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {useHistory} from 'react-router-native';
+import RouterPackage from '../Routing';
 import {
   Container,
   Header,
@@ -28,6 +28,7 @@ import {getEmployees, createEmployee} from '../apis';
 import {EmployeeList} from '../components';
 import storage from '../storage';
 
+const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
   list: {margin: 15},
   button: {margin: 15, marginBottom: 50},
