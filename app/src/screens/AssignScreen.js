@@ -25,8 +25,14 @@ import {
   removeReviewerFromState,
   DataProvider,
   updateEmployeeToState,
+  removeEmployeeFromState,
 } from '../contexts';
-import {addReviewer, removeReviewer, updateEmployee} from '../apis';
+import {
+  addReviewer,
+  removeReviewer,
+  updateEmployee,
+  removeEmployee,
+} from '../apis';
 
 const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
@@ -55,10 +61,20 @@ const AssignScreen = ({match, navigation}) => {
       }
     });
   };
+
   const handleRemove = reviewer => {
     removeReviewer(employeeID, reviewer).then(status => {
       if (status) {
         dispatch(removeReviewerFromState({reviewee: employeeID, reviewer}));
+      }
+    });
+  };
+
+  const deleteEmployee = () => {
+    history.goBack();
+    removeEmployee(employeeID).then(status => {
+      if (status) {
+        dispatch(removeEmployeeFromState(employeeID));
       }
     });
   };
@@ -89,7 +105,7 @@ const AssignScreen = ({match, navigation}) => {
             </Item>
           </Form>
           <Button block style={styles.button} onPress={updateName}>
-            <Text>Update</Text>
+            <Text>Update Name</Text>
           </Button>
           <Text style={styles.header}>{`Please choose ${
             employee.name
@@ -101,6 +117,9 @@ const AssignScreen = ({match, navigation}) => {
             addReviewer={handleAdd}
             removeReviewer={handleRemove}
           />
+          <Button block style={styles.button} onPress={deleteEmployee} danger>
+            <Text>Delete Employee</Text>
+          </Button>
         </Content>
       </Container>
     </DataProvider>

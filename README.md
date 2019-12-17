@@ -4,17 +4,17 @@
   - Admin Views
     - Add/remove/update/view employees
       - [X] add employee
-      - [ ] remove employee
+      - [X] remove employee
       - [X] update employee
       - [X] view employees
     - Add/update/view performance reviews
       - [ ] add review
       - [ ] update review
       - [ ] view review
-    - [x] Assign employees to participate in another employee's performance review
+    - [X] Assign employees to participate in another employee's performance review
   - Employee Views
-    - [x] List of performance reviews requiring feedback
-    - [x] Submit feedback
+    - [X] List of performance reviews requiring feedback
+    - [X] Submit feedback
 
 # Development Requirement
   - dotenv

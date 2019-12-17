@@ -6,4 +6,5 @@ export SharedDataContext, {
   addReviewerToState,
   removeReviewerFromState,
   updateEmployeeToState,
+  removeEmployeeFromState,
 } from './SharedDataContext';

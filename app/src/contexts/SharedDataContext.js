@@ -3,6 +3,7 @@ import React, {useReducer} from 'react';
 const INITIAL = 'INITIAL';
 const ADD_EMPLOYEE = 'ADD_EMPLOYEE';
 const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
+const REMOVE_EMPLOYEE = 'REMOVE_EMPLOYEE';
 const ADD_REVIEWER = 'ADD_REVIEWER';
 const REMOVE_REVIEWER = 'REMOVE_REVIEWER';
 
@@ -30,6 +31,13 @@ export const updateEmployeeToState = data => {
   return {
     type: UPDATE_EMPLOYEE,
     data,
+  };
+};
+
+export const removeEmployeeFromState = id => {
+  return {
+    type: REMOVE_EMPLOYEE,
+    id,
   };
 };
 
@@ -65,6 +73,8 @@ const reducer = (state, action) => {
       const arr = state.filter(s => s.id !== action.data.id);
       return [...arr, action.data];
     }
+    case REMOVE_EMPLOYEE:
+      return [...state.filter(s => s.id !== action.id)];
     case ADD_REVIEWER: {
       const reviewee = state.find(e => e.id === action.data.reviewee);
       const reviewer = state.find(e => e.id === action.data.reviewer);

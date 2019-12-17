@@ -169,8 +169,20 @@ func (em Employee) Remove(db database.DB) error {
 		return errors.New("employee id should not be zero")
 	}
 
+	deleteReviewSQL := `DELETE FROM performance_reviews WHERE assign_id IN (SELECT id FROM review_assignments WHERE reviewee = ? OR reviewer = ?)`
+	_, err := db.Exec(deleteReviewSQL, em.ID, em.ID)
+	if err != nil {
+		return err
+	}
+
+	deleteAssignSQL := `DELETE FROM review_assignments WHERE reviewee = ? OR reviewer = ?`
+	_, err = db.Exec(deleteAssignSQL, em.ID, em.ID)
+	if err != nil {
+		return err
+	}
+
 	sqlStatement := `DELETE FROM employees WHERE id = ?`
-	_, err := db.Exec(sqlStatement, em.ID)
+	_, err = db.Exec(sqlStatement, em.ID)
 	if err != nil {
 		return err
 	}

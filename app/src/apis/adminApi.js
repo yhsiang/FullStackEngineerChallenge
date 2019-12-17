@@ -46,6 +46,16 @@ export const updateEmployee = async (id, name) => {
   return {};
 };
 
+export const removeEmployee = async id => {
+  const response = await api.delete(`/admin/employees/${id}`);
+
+  if (response.data.status) {
+    return response.data.status;
+  }
+  // TODO: handle error here
+  return {};
+};
+
 export const addReviewer = async (reviewee, reviewer) => {
   const response = await api.post(
     '/admin/reviewers/add',

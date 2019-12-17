@@ -3,6 +3,7 @@ export {
   getEmployees,
   createEmployee,
   updateEmployee,
+  removeEmployee,
   addReviewer,
   removeReviewer,
 } from './adminApi';
