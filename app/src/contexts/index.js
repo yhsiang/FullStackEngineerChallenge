@@ -8,3 +8,5 @@ export SharedDataContext, {
   updateEmployeeToState,
   removeEmployeeFromState,
 } from './SharedDataContext';
+
+export PageContext, {PageProvider} from './PageContext';

@@ -8,8 +8,3 @@ export const signIn = async (user, pass) => {
 
   return null;
 };
-
-export const signOut = async (user, pass) => {
-  const response = await api.post('/signOut');
-  return response.data.status;
-};

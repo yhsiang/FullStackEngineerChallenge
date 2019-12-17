@@ -44,6 +44,64 @@ func QueryReview(c *gin.Context) {
 	})
 }
 
+func QueryReviews(c *gin.Context) {
+	db := c.MustGet("DB").(database.DB)
+	var re models.Review
+	reviews, err := re.FindAll(db)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Status:  false,
+			Message: err.Error(),
+		})
+		c.Abort()
+		return
+	}
+
+	c.JSON(200, DataResponse{
+		Status: true,
+		Data:   reviews,
+	})
+}
+
+func UpdateReview(c *gin.Context) {
+	var r ReviewForm
+	if err := c.ShouldBindUri(&r); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Status:  false,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&r); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Status:  false,
+			Message: err.Error(),
+		})
+		return
+	}
+
+	db := c.MustGet("DB").(database.DB)
+	var re = models.Review{
+		ID:      r.ReviewID,
+		Content: r.Content,
+	}
+	review, err := re.Save(db)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Status:  false,
+			Message: err.Error(),
+		})
+		c.Abort()
+		return
+	}
+
+	c.JSON(200, DataResponse{
+		Status: true,
+		Data:   review,
+	})
+}
+
 func CreateReview(c *gin.Context) {
 	var rf ReviewForm
 	if err := c.ShouldBindJSON(&rf); err != nil {
@@ -61,12 +119,16 @@ func CreateReview(c *gin.Context) {
 	}
 	assignID, err := as.FindAssignID(db)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{
-			Status:  false,
-			Message: err.Error(),
-		})
-		c.Abort()
-		return
+		assign, err := as.Save(db)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{
+				Status:  false,
+				Message: err.Error(),
+			})
+			c.Abort()
+			return
+		}
+		assignID = assign.ID
 	}
 
 	var review = models.Review{

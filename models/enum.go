@@ -6,4 +6,5 @@ const (
 	EmployeeType ResponseType = iota + 1
 	EmployeesType
 	ReviewType
+	ReviewsType
 )

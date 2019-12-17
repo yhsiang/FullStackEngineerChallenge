@@ -33,16 +33,3 @@ export const getReview = async reviewID => {
   // TODO: handle error here
   return {};
 };
-
-export const updateReview = async (id, content) => {
-  const response = await api.put('/reviews', {
-    id,
-    content,
-  });
-
-  if (response.data.status && response.data.data) {
-    return response.data.data;
-  }
-  // TODO: handle error here
-  return {};
-};

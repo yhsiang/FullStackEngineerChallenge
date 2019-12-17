@@ -17,7 +17,7 @@ import {
   Text,
 } from 'native-base';
 
-import {getEmployee, createReview, getReview} from '../apis';
+import {getEmployee, createReview, getReview, updateReview} from '../apis';
 const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
   field: {marginTop: 30},
@@ -43,13 +43,20 @@ const ReviewScreen = ({match: {path, params}}) => {
     } else {
       getEmployee(reviewee).then(data => setName(data.name));
     }
-  }, [reviewee, reviewer, reviewID, isEdit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = () => {
-    createReview(reviewee, reviewer, content).then(() => {
-      setContent('');
-      history.goBack('/');
-    });
+    if (isEdit) {
+      updateReview(reviewID, content).then(data => {
+        setContent(data.content);
+      });
+    } else {
+      createReview(reviewee, reviewer, content).then(() => {
+        setContent('');
+        history.goBack('/');
+      });
+    }
   };
 
   return (
@@ -77,7 +84,7 @@ const ReviewScreen = ({match: {path, params}}) => {
           </Textarea>
         </Form>
         <Button block style={styles.field} onPress={handleSubmit}>
-          <Text>Submit Feedback</Text>
+          <Text>{isEdit ? 'Update Review' : 'Submit Feedback'}</Text>
         </Button>
       </Content>
     </Container>

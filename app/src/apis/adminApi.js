@@ -83,3 +83,29 @@ export const removeReviewer = async (reviewee, reviewer) => {
 
   return response.data.status;
 };
+
+export const getReviews = async () => {
+  const response = await api.get('/admin/reviews');
+
+  if (response.data.status && response.data.data) {
+    return response.data.data;
+  }
+  return [];
+};
+
+export const updateReview = async (id, content) => {
+  const response = await api.put(
+    `/admin/reviews/${id}`,
+    {content},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  if (response.data.status && response.data.data) {
+    return response.data.data;
+  }
+  return {};
+};

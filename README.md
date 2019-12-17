@@ -8,9 +8,9 @@
       - [X] update employee
       - [X] view employees
     - Add/update/view performance reviews
-      - [ ] add review
-      - [ ] update review
-      - [ ] view review
+      - [X] add review
+      - [X] update review
+      - [X] view review
     - [X] Assign employees to participate in another employee's performance review
   - Employee Views
     - [X] List of performance reviews requiring feedback

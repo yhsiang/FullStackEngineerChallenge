@@ -8,7 +8,7 @@ import {
   UserScreen,
   ReviewScreen,
 } from './screens';
-import {AuthContext, auth, DataProvider} from './contexts';
+import {AuthContext, auth, DataProvider, PageProvider} from './contexts';
 
 const {Route, Redirect} = RouterPackage;
 const App = () => {
@@ -16,15 +16,20 @@ const App = () => {
     <Router>
       <AuthContext.Provider value={auth}>
         <DataProvider>
-          <Route exact path="/" component={SignInScreen} />
-          <PrivateRoute path="/user/:id" component={UserScreen} />
-          <PrivateRoute path="/edit/:review_id" component={ReviewScreen} />
-          <PrivateRoute
-            path="/review/:reviewee_id/:reviewer_id"
-            component={ReviewScreen}
-          />
-          <PrivateRoute path="/admin" component={AdminScreen} />
-          <PrivateRoute path="/assign/:employee_id" component={AssignScreen} />
+          <PageProvider>
+            <Route exact path="/" component={SignInScreen} />
+            <PrivateRoute path="/user/:id" component={UserScreen} />
+            <PrivateRoute path="/edit/:review_id" component={ReviewScreen} />
+            <PrivateRoute
+              path="/review/:reviewee_id/:reviewer_id"
+              component={ReviewScreen}
+            />
+            <PrivateRoute path="/admin" component={AdminScreen} />
+            <PrivateRoute
+              path="/assign/:employee_id"
+              component={AssignScreen}
+            />
+          </PageProvider>
         </DataProvider>
       </AuthContext.Provider>
     </Router>

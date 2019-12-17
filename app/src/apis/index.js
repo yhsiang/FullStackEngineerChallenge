@@ -6,5 +6,7 @@ export {
   removeEmployee,
   addReviewer,
   removeReviewer,
+  getReviews,
+  updateReview,
 } from './adminApi';
-export {getEmployee, createReview, getReview, updateReview} from './userAPI';
+export {getEmployee, createReview, getReview} from './userAPI';

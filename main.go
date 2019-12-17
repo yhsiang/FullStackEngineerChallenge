@@ -71,6 +71,8 @@ func main() {
 		adminAuth.DELETE("/employees/:id", apis.RemoveEmployee)
 		adminAuth.POST("/reviewers/add", apis.AddReviewer)
 		adminAuth.POST("/reviewers/remove", apis.RemoveReviewer)
+		adminAuth.GET("/reviews", apis.QueryReviews)
+		adminAuth.PUT("/reviews/:review_id", apis.UpdateReview)
 	}
 
 	if err := router.Run(); err != nil {

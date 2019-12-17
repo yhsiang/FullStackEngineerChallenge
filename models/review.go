@@ -7,7 +7,7 @@ import (
 )
 
 type Review struct {
-	ID        int64     `db:"id"`
+	ID        int64     `db:"id" json:"id"`
 	Content   string    `db:"content" json:"content"`
 	AssignID  int64     `db:"assign_id" json:"assign_id"`
 	UpdatedAt time.Time `db:"updated_at"`
@@ -18,7 +18,31 @@ func (r Review) Type() ResponseType {
 	return ReviewType
 }
 
-func (r Review) FindAll(db database.DB, em Employee) (reviews []Review, err error) {
+type Reviews []Review
+
+func (r Reviews) Type() ResponseType {
+	return ReviewsType
+}
+
+func (r Review) FindAll(db database.DB) (reviews Reviews, err error) {
+	sqlStatement := `select id, content, assign_id from performance_reviews`
+	rows, err := db.Query(sqlStatement)
+	if err != nil {
+		return reviews, err
+	}
+
+	for rows.Next() {
+		var review Review
+		err = rows.Scan(&review.ID, &review.Content, &review.AssignID)
+		if err != nil {
+			return reviews, err
+		}
+		reviews = append(reviews, review)
+	}
+	return reviews, err
+}
+
+func (r Review) FindAllByEmployee(db database.DB, em Employee) (reviews []Review, err error) {
 	sqlStatement := `select * from performance_reviews WHERE assign_id IN (select id from review_assignments where reviewer = ?)`
 	rows, err := db.Query(sqlStatement, em.ID)
 	if err != nil {
