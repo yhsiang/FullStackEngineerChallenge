@@ -42,24 +42,6 @@ func (r Review) FindAll(db database.DB) (reviews Reviews, err error) {
 	return reviews, err
 }
 
-func (r Review) FindAllByEmployee(db database.DB, em Employee) (reviews []Review, err error) {
-	sqlStatement := `select * from performance_reviews WHERE assign_id IN (select id from review_assignments where reviewer = ?)`
-	rows, err := db.Query(sqlStatement, em.ID)
-	if err != nil {
-		return reviews, err
-	}
-
-	for rows.Next() {
-		var review Review
-		err = rows.Scan(&r)
-		if err != nil {
-			return reviews, err
-		}
-		reviews = append(reviews, review)
-	}
-	return reviews, err
-}
-
 func (r Review) Find(db database.DB) (Review, error) {
 	sqlStatement := `select assign_id, content from performance_reviews WHERE id = ?`
 	err := db.QueryRow(sqlStatement, r.ID).Scan(&r.AssignID, &r.Content)
