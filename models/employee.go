@@ -149,6 +149,17 @@ func (em Employee) Save(db database.DB) (Employee, error) {
 		}
 	}
 
+	reviewers, err := em.getReviewers(db)
+	if err != nil {
+		return em, err
+	}
+	em.Reviewers = reviewers
+	reviewees, err := em.getReviewees(db)
+	if err != nil {
+		return em, err
+	}
+	em.Reviewees = reviewees
+
 	return em, nil
 }
 

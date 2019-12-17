@@ -1,6 +1,22 @@
 # Review 360
 
-# Requirement
+# Challenge Requirement
+  - Admin Views
+    - Add/remove/update/view employees
+      - [X] add employee
+      - [ ] remove employee
+      - [X] update employee
+      - [X] view employees
+    - Add/update/view performance reviews
+      - [ ] add review
+      - [ ] update review
+      - [ ] view review
+    - [x] Assign employees to participate in another employee's performance review
+  - Employee Views
+    - [x] List of performance reviews requiring feedback
+    - [x] Submit feedback
+
+# Development Requirement
   - dotenv
   - golang
   - mysql

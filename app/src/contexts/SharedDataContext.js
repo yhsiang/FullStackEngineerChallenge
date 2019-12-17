@@ -1,7 +1,8 @@
 import React, {useReducer} from 'react';
 
 const INITIAL = 'INITIAL';
-const ADD = 'ADD';
+const ADD_EMPLOYEE = 'ADD_EMPLOYEE';
+const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
 const ADD_REVIEWER = 'ADD_REVIEWER';
 const REMOVE_REVIEWER = 'REMOVE_REVIEWER';
 
@@ -16,7 +17,18 @@ export const addData = data => {
   }
 
   return {
-    type: ADD,
+    type: ADD_EMPLOYEE,
+    data,
+  };
+};
+
+export const updateEmployeeToState = data => {
+  if (!data) {
+    return;
+  }
+
+  return {
+    type: UPDATE_EMPLOYEE,
     data,
   };
 };
@@ -47,8 +59,12 @@ const reducer = (state, action) => {
   switch (action.type) {
     case INITIAL:
       return [...action.data];
-    case ADD:
+    case ADD_EMPLOYEE:
       return [action.data, ...state];
+    case UPDATE_EMPLOYEE: {
+      const arr = state.filter(s => s.id !== action.data.id);
+      return [...arr, action.data];
+    }
     case ADD_REVIEWER: {
       const reviewee = state.find(e => e.id === action.data.reviewee);
       const reviewer = state.find(e => e.id === action.data.reviewer);

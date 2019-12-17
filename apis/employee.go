@@ -54,6 +54,14 @@ func CreateEmployee(c *gin.Context) {
 
 func UpdateEmployee(c *gin.Context) {
 	var em models.Employee
+	if err := c.ShouldBindUri(&em); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Status:  false,
+			Message: err.Error(),
+		})
+		return
+	}
+
 	if err := c.ShouldBindJSON(&em); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{
 			Status:  false,

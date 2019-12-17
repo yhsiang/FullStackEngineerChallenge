@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   Container,
@@ -11,6 +11,10 @@ import {
   Body,
   Title,
   Right,
+  Form,
+  Item,
+  Label,
+  Input,
 } from 'native-base';
 
 import RouterPackage from '../Routing';
@@ -20,12 +24,14 @@ import {
   addReviewerToState,
   removeReviewerFromState,
   DataProvider,
+  updateEmployeeToState,
 } from '../contexts';
-import {addReviewer, removeReviewer} from '../apis';
+import {addReviewer, removeReviewer, updateEmployee} from '../apis';
 
 const {useHistory} = RouterPackage;
 const styles = StyleSheet.create({
   header: {margin: 15},
+  button: {margin: 15, marginTop: 20},
 });
 
 const AssignScreen = ({match, navigation}) => {
@@ -34,6 +40,13 @@ const AssignScreen = ({match, navigation}) => {
   const employeeID = +match.params.employee_id;
   const employee = state.find(em => em.id === employeeID);
   const reviewers = employee.reviewers.map(it => it.id);
+  const [name, setName] = useState(employee.name);
+
+  const updateName = () => {
+    updateEmployee(employeeID, name).then(data => {
+      dispatch(updateEmployeeToState(data));
+    });
+  };
 
   const handleAdd = reviewer => {
     addReviewer(employeeID, reviewer).then(status => {
@@ -65,6 +78,19 @@ const AssignScreen = ({match, navigation}) => {
           <Right />
         </Header>
         <Content>
+          <Form>
+            <Item fixedLabel>
+              <Label>Employee Name</Label>
+              <Input
+                autoCapitalize="none"
+                value={name}
+                onChangeText={text => setName(text)}
+              />
+            </Item>
+          </Form>
+          <Button block style={styles.button} onPress={updateName}>
+            <Text>Update</Text>
+          </Button>
           <Text style={styles.header}>{`Please choose ${
             employee.name
           }'s reviewer`}</Text>

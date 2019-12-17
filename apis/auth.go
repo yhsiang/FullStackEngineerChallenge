@@ -1,7 +1,6 @@
 package apis
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 
@@ -40,7 +39,6 @@ func IdentityHandler(c *gin.Context) interface{} {
 }
 
 func Authenticator(c *gin.Context) (interface{}, error) {
-	fmt.Printf("testtt")
 	var loginVals login
 	if err := c.ShouldBind(&loginVals); err != nil {
 		return "", jwt.ErrMissingLoginValues
