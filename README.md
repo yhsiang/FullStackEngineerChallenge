@@ -1,4 +1,10 @@
 # Review 360
+  review360 is a project to complete Full Stack Developer Challenge.
+  backend service is using golang, and frontend part by react-native and react-native-web.
+
+  you can login by `admin`:`admin`. if you create an employee, login credential will be `user{employee_id}`:`user{employee_id}`.
+
+  frontend ui is based on [native-base](https://nativebase.io)
 
 # Challenge Requirement
   - Admin Views
@@ -15,6 +21,22 @@
   - Employee Views
     - [X] List of performance reviews requiring feedback
     - [X] Submit feedback
+  - API
+    - unauthorized
+      - [x] POST /api/v1/signIn                 login endpoint
+    - basic
+      - [x] GET /api/v1/employees/:employee_id  get employee info
+      - [x] POST /api/v1/reviews                create review
+      - [x] GET /api/reviews/:review_id         get review content
+    - admin
+	    - [x] GET /api/v1/admin/employees         get employee list
+		  - [x] POST /api/v1/admin/employee         create employee
+		  - [x] PUT /employees/:employee_id         update employee name
+		  - [x] DELETE /employees/:employee_id      delete employee
+		  - [x] POST /reviewers/add                 add reviewer to employee
+		  - [x] POST /reviewers/remove              remove reviewer from employee
+		  - [x] GET /reviews                        get review list
+		  - [x] PUT /reviews/:review_id              update review content
 
 # Development Requirement
   - dotenv
@@ -110,6 +132,8 @@ we will encounter many problems from testing lib, test runner, 3rd lib and our o
 
 more details can see `app/config`
 
+__original readme is below__
+-----
 # Full Stack Developer Challenge
 This is an interview challengs. Please feel free to fork. Pull Requests will be ignored.
 
